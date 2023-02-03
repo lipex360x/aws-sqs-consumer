@@ -1,13 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { SqsConsumerEventHandler, SqsMessageHandler } from '@ssut/nestjs-sqs';
 import { SQS } from 'aws-sdk';
-import { SQS_QUEUE_NAME } from 'src/constants';
+import { SQS_QUEUE_NAME } from 'src/modules/notifications/domain/constants';
+import { ReadMessageUseCase } from '../../../application/usecases';
 
 @Injectable()
 export class MessageConsumer {
+  constructor(private readonly readMessage: ReadMessageUseCase) {}
   @SqsMessageHandler(SQS_QUEUE_NAME, false)
-  public readMessage({ Body = '', ReceiptHandle = '' }: SQS.Message) {
-    console.log(Body, ReceiptHandle);
+  public handlerMessage({ Body = '', ReceiptHandle = '' }: SQS.Message) {
+    this.readMessage.execute(Body, ReceiptHandle);
   }
 
   @SqsConsumerEventHandler(SQS_QUEUE_NAME, 'processing_error')
