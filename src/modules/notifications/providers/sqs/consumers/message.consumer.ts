@@ -8,12 +8,12 @@ import { ReadMessageUseCase } from '../../../application/usecases';
 export class SQSConsumer {
   constructor(private readonly readMessage: ReadMessageUseCase) {}
 
-  @SqsMessageHandler(SQS_QUEUE_NAME.myQueue, false)
+  @SqsMessageHandler(SQS_QUEUE_NAME.queue1, false)
   public handlerMessage({ Body = '', ReceiptHandle = '' }: SQS.Message) {
     this.readMessage.execute(Body, ReceiptHandle);
   }
 
-  @SqsConsumerEventHandler(SQS_QUEUE_NAME.myQueue, 'processing_error')
+  @SqsConsumerEventHandler(SQS_QUEUE_NAME.queue1, 'processing_error')
   public error(error: Error, _message: SQS.Message) {
     console.log(error, _message);
   }

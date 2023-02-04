@@ -9,7 +9,7 @@ export class SQSProducer {
   constructor(private readonly sqsService: SqsService) {}
 
   public async emit(queue: keyof typeof SQS_QUEUE_NAME, payload: any) {
-    await this.sqsService.send('queue2', {
+    await this.sqsService.send(SQS_QUEUE_NAME[queue], {
       id: randomUUID(),
       body: payload,
       delaySeconds: 0,
