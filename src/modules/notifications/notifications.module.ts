@@ -3,7 +3,8 @@ import { ConfigModule } from '@nestjs/config';
 import { SqsModule } from '@ssut/nestjs-sqs';
 import { SQS_QUEUE_NAME } from 'src/modules/notifications/domain/constants';
 import { ReadMessageUseCase } from './application/usecases';
-import { MessageConsumer } from './providers/sqs/consumers/message.consumer';
+import { SQSConsumer } from './providers/sqs/consumers/message.consumer';
+import { SQSProducer } from './providers/sqs/producers';
 
 @Module({
   imports: [
@@ -11,13 +12,19 @@ import { MessageConsumer } from './providers/sqs/consumers/message.consumer';
     SqsModule.register({
       consumers: [
         {
-          name: SQS_QUEUE_NAME,
-          queueUrl: `${process.env.AWS_URL}/${SQS_QUEUE_NAME}`,
-          shouldDeleteMessages: false,
+          name: SQS_QUEUE_NAME.myQueue,
+          queueUrl: `${process.env.AWS_URL}/${SQS_QUEUE_NAME.myQueue}`,
+        },
+      ],
+      producers: [
+        {
+          name: SQS_QUEUE_NAME.queue2,
+          region: 'us-east-1',
+          queueUrl: `${process.env.AWS_URL}/${SQS_QUEUE_NAME.queue2}`,
         },
       ],
     }),
   ],
-  providers: [MessageConsumer, ReadMessageUseCase],
+  providers: [ReadMessageUseCase, SQSConsumer, SQSProducer],
 })
 export class NotificationsModule {}

@@ -5,14 +5,15 @@ import { SQS_QUEUE_NAME } from 'src/modules/notifications/domain/constants';
 import { ReadMessageUseCase } from '../../../application/usecases';
 
 @Injectable()
-export class MessageConsumer {
+export class SQSConsumer {
   constructor(private readonly readMessage: ReadMessageUseCase) {}
-  @SqsMessageHandler(SQS_QUEUE_NAME, false)
+
+  @SqsMessageHandler(SQS_QUEUE_NAME.myQueue, false)
   public handlerMessage({ Body = '', ReceiptHandle = '' }: SQS.Message) {
     this.readMessage.execute(Body, ReceiptHandle);
   }
 
-  @SqsConsumerEventHandler(SQS_QUEUE_NAME, 'processing_error')
+  @SqsConsumerEventHandler(SQS_QUEUE_NAME.myQueue, 'processing_error')
   public error(error: Error, _message: SQS.Message) {
     console.log(error, _message);
   }

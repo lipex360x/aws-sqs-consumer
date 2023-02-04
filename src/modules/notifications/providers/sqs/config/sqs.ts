@@ -1,4 +1,5 @@
-import { SQS } from 'aws-sdk';
-import { SQS_QUEUE_URL } from 'src/modules/notifications/domain/constants';
+// import { SQS } from 'aws-sdk';
 
-export const sqs = new SQS({ endpoint: SQS_QUEUE_URL });
+// const SQS_QUEUE_URL = process.env.AWS_URL || 'http://localhost:4566';
+
+// export const sqs = new SQS({ endpoint: SQS_QUEUE_URL });
