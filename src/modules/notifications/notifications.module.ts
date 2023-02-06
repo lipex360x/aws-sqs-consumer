@@ -17,6 +17,8 @@ import { SQSProducer } from './providers/sqs/producers';
         {
           name: SQS_QUEUE_NAME.queue1,
           region: SQS_REGION.area,
+          // shouldDeleteMessages: false,
+          // terminateVisibilityTimeout: true,
           queueUrl: `${process.env.AWS_URL}/${SQS_QUEUE_NAME.queue1}`,
         },
       ],
